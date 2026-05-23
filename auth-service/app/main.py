@@ -1,16 +1,20 @@
 from fastapi import FastAPI
-from app.routes.auth_routes import router as auth_router
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(
-    title="Movie Recommendation Auth Service",
-    version="1.0.0"
+from app.routes.auth_routes import router
+
+app = FastAPI(title="Auth Service")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
-
-app.include_router(auth_router)
+app.include_router(router)
 
 
 @app.get("/")
-def home():
-    return {
-        "message": "Auth service is running"
-    }
+def root():
+    return {"message": "Auth service running"}
